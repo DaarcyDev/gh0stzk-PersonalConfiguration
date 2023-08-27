@@ -9,12 +9,13 @@ get_icon(){
          icon="$iDIR/low-battery.png"
     elif [ "$powerStatus" == "20%" ]; then
          icon="$iDIR/low-battery.png"
-    elif [ "$powerStatus" == "100%" ]; then
+    elif [ "$powerStatus" == "98%" ]; then
          icon="$iDIR/full-battery.png"
     fi
 }
 
 time=$(upower -d | grep "time to empty" | head -n 1)
+timeFull=$(upower -d | grep "time to full" | head -n 1)
 get_icon
 if [ "$powerStatus" == "10%" ]; then
     if [ "$powerStatusCharging" == "discharging" ]; then
@@ -26,8 +27,8 @@ elif [ "$powerStatus" == "20%" ]; then
         timeout 3 dunstify -i "$icon" "20% Battery" -u low "$time"
     fi
   
-elif [ "$powerStatus" == "100%" ]; then
-    if [ "$powerStatusCharging" == "discharging" ]; then
-        timeout 3 dunstify -i "$icon" "100% Battery" -u low "$time"
+elif [ "$powerStatus" == "98%" ]; then
+    if [ "$powerStatusCharging" == "charging" ]; then
+        timeout 3 dunstify -i "$icon" "100% Battery" -u low "$timeFull"
     fi
 fi
