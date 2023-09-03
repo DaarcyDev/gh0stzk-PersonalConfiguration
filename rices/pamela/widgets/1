@@ -258,10 +258,9 @@ color: #8C8C8C;
     color:#f28fad
 }
 .netbox{
-    margin:0;
-    padding:3rem 3rem;
-    //max-height:1em;
-    background-color: #1d1f28;
+    margin:0rem;
+    padding:1rem;
+    //height:10%;
 }
 .currentNetwork{
     padding:.5rem 2rem;
@@ -271,7 +270,7 @@ color: #8C8C8C;
 }
 .firstNetwork{
     background-color: #353535;
-    padding:.5rem 1rem;
+    padding:0rem;
     margin: .3rem;
     border-radius: 10px;
 }

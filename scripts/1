@@ -58,33 +58,21 @@ case "$1" in
 					-e ~/.local/bin/sysfetch;;
   --firstNetwork)
      alacritty --class FloaTerm,Alacritty\
-                    -o window.dimensions.lines=15 \
-                       window.dimensions.columns=55\
+                    -o window.dimensions.lines=20 \
+                       window.dimensions.columns=50\
                     -e ~/.config/bspwm/scripts/firstNetwork.sh;;
   
   --secondNetwork)
      alacritty --class FloaTerm,Alacritty\
-                    -o window.dimensions.lines=15 \
-                       window.dimensions.columns=55\
+                    -o window.dimensions.lines=26 \
+                       window.dimensions.columns=40\
                     -e ~/.config/bspwm/scripts/secondNetwork.sh;;
 
   --thirdNetwork)
      alacritty --class FloaTerm,Alacritty\
-                    -o window.dimensions.lines=15 \
-                       window.dimensions.columns=55\
+                    -o window.dimensions.lines=26 \
+                       window.dimensions.columns=40\
                     -e ~/.config/bspwm/scripts/thirdNetwork.sh;;
-
-  --bluetoothFirstDevice)
-    alacritty --class FloaTerm,Alacritty\
-                    -o window.dimensions.line=15\
-                       window.dimensions.columns=55\
-                    -e ~/.config/bspwm/scripts/bluetoothFirstDevice.sh;;
-  
-  --bluetoothSecondDevice)
-    alacritty --class FloaTerm,Alacritty\
-                    -o window.dimensions.line=15\
-                       window.dimensions.coumns=55\
-                    -e ~/.config/bspwm/scripts/bluetoothSecondDevice.sh;;
   #Apps
 
   --spotify)
@@ -128,13 +116,6 @@ case "$1" in
   
   --thirdNetwork)
     thirdNetwork;;
-
-  --bluetoothFirstDevice)
-    bluetoothFirstDevice;;
-
-  --bluetoothSecondDevice)
-    bluetoothSecondDevice;;
-
   *)
     echo "Opción no válida";;
 esac

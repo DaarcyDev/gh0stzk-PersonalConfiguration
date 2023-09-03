@@ -36,6 +36,17 @@ elif [[ -f "$LOCKFILE_PROFILE" ]]; then
 fi
 }
 
+wifi() {
+    LOCKFILE_PROFILE="$HOME/.cache/eww-pam-wifi.lock"
+
+if [[ ! -f "$LOCKFILE_PROFILE" ]]; then
+    touch "$LOCKFILE_PROFILE"
+    eww open wifiMenu -c ~/.config/bspwm/rices/"$RICETHEME"/widgets/
+elif [[ -f "$LOCKFILE_PROFILE" ]]; then
+    eww close wifiMenu -c ~/.config/bspwm/rices/"$RICETHEME"/widgets/
+    rm "$LOCKFILE_PROFILE"
+fi
+}
 #mplayer() {
 #LOCKFILE_MPLAYER="$HOME/.cache/eww-pam-mplayer.lock"
 
@@ -82,6 +93,8 @@ case "$1" in
 		calendar;;
     --bluetooth)
         bluetooth;;
+    --wifiNet)
+        wifi;;
 	*)
 		echo "Error..";;
 esac

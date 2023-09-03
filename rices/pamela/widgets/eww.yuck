@@ -1,11 +1,18 @@
 
 (defpoll time0 :interval "10s"  "date '+%H':%M")
 (defpoll date :interval "10s"  "date '+%b %d'")
-
-;; Profile vars
+(defpoll net :interval "10s" "iwctl station wlan0 show | awk '/Connected network/ {print $3}' && iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }'")
+(defpoll currentNetwork :interval "1s" "iwctl station wlan0 show | awk '/Connected network/ {print $3}'")
+(defpoll firstNetwork :interval "1s" "iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }' | sed -n '1p'")
+(defpoll secondNetwork :interval "1s" "iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }' | sed -n '2p'")
+(defpoll thirdNetwork :interval "1s" "iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }' | sed -n '3p'")
+(defpoll currentBluetooth :interval "1s" "bluetoothctl info | grep 'Name' | cut -d ' ' -f 2-")
+(defpoll bluetoothFirstDevice :interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '1p'")
+(defpoll bluetoothSecondDevice :interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '2p'")
+;; Profile vars ;;
 (defvar IMAGEP "../../../assets/bendy.png")
 
-;; Music Variables
+;; Music Variables ;;
 (defpoll art		:interval "2s"  "MediaControl coverloc")
 (defpoll title		:interval "2s"  "MediaControl title")
 (defpoll artist		:interval "2s"  "MediaControl artist")
@@ -126,26 +133,73 @@
                :valign "center"
                :space-evenly "true"
                :spacing 40
-                 (button :class "launcher-btn bluetoothOption"
+                 (button :class "bluetoothOption"
                     :onclick "OpenApps --bluetoothOn"
                     :tooltip "On"
                     "󰂯")
-                 (button :class "launcher-btn bluetoothOption"
+                 (button :class "bluetoothOption"
                     :onclick "OpenApps --bluetoothOff"
                     :tooltip "Off"
                     "󰂲"))
+          (label :text currentBluetooth
+                 :class "currentNetwork")
           (box :orientation "v"
                :halign "center"
                :valign "center"
-               :space-evenly "false"
-                 (label :text "scan"
-                        :class "launcher-pfp-label")     
-                 (button :class "launcher-btn"
-                    :onclick "OpenApps --bluetooth"
-                    :tooltip "scan"
-                    "󱓇"))))
+               :space-evenly "true"
+                (label :text "connect"
+                       :class "launcher-pfp-label")
+                (button :class "bluetoothDevice"
+                        :onclick "OpenApps --bluetoothFirstDevice"
+                        :tooltip bluetoothFirstDevice
+                        bluetoothFirstDevice)
+                (button :class "bluetoothDevice"
+                        :onclick "OpenApps --bluetoothSecondDevice"
+                        :tooltip bluetoothSecondDevice
+                        bluetoothSecondDevice)
+                (label :text "scan"
+                       :class "launcher-pfp-label")  
+                (button :class "bluetoothOption"
+                        :onclick "OpenApps --bluetooth"
+                        :tooltip "scan"
+                        "󱓇"))))
 
 
+;; wifiWidget ;;
+(defwidget wifiWidget []
+    (box :class "optionbox netbox"
+         :orientation "v"
+         :space-evenly "false"
+         :halign "center"
+         :valign "start"
+         (box :orientation "v"
+                :halign "center"
+                :valign "center"
+                :space-evenly "false"
+                :hexpand "true"
+                :spacing 0
+                (label :text "Network"
+                        :class "launcher-pfp-label")
+                (label :text currentNetwork
+                        :class "currentNetwork"))
+        (box :orientation "v"
+                :space-evenly "false"
+            (button :class "firstNetwork"
+                        :onclick "OpenApps --firstNetwork"
+                        :tooltip firstNetwork
+                        :visible {firstNetwork != ""}
+                        firstNetwork)
+            (button :class "firstNetwork"
+                        :onclick "OpenApps --secondNetwork"
+                        :tooltip secondNetwork
+                        :visible {secondNetwork != ""}
+                        secondNetwork)
+            (button :class "firstNetwork"
+                        :onclick "OpenApps --thirdNetwork"
+                        :tooltip thirdNetwork
+                        :visible {thirdNetwork != ""}
+                        thirdNetwork))))
+      
 
 
 ;;  Music Widgets ;;
@@ -185,6 +239,14 @@
 		)
 	)
 )
+
+;; options prueba ;;
+(defwindow wifiMenu
+    :geometry (geometry :x "70%"
+                        :y "7%"
+                        :width "10%"
+                        :height "10%")
+    (wifiWidget))
 
 ;; Options Menu ;;
 (defwindow bluetoothMenu
