@@ -66,7 +66,7 @@ set_picom_config() {
 			-e "s/corner-radius = .*/corner-radius = 6/g" \
 	    	-e "s/\".*:class_g = 'Alacritty'\"/\"90:class_g = 'Alacritty'\"/g" \
 			-e "s/\".*:class_g = 'FloaTerm'\"/\"90:class_g = 'FloaTerm'\"/g"\
-            -e "s/\".*:class_g = 'code'\"/\"95:class_g = 'code'\"/g"\
+            -e "s/\".*:class_g = 'code-oss'\"/\"95:class_g = 'code-oss'\"/g"\
             #-e "s/\".*:class_g = 'code'\"/\"90:class_g = 'code'\"/g"\
 }
 

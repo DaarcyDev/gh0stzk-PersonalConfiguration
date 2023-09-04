@@ -146,7 +146,7 @@
           (box :orientation "v"
                :halign "center"
                :valign "center"
-               :space-evenly "true"
+               :space-evenly "false"
                 (label :text "connect"
                        :class "launcher-pfp-label")
                 (button :class "bluetoothDevice"
@@ -240,9 +240,9 @@
 	)
 )
 
-;; options prueba ;;
+;; options wifi ;;
 (defwindow wifiMenu
-    :geometry (geometry :x "70%"
+    :geometry (geometry :x "67%"
                         :y "7%"
                         :width "10%"
                         :height "10%")
@@ -252,7 +252,7 @@
 (defwindow bluetoothMenu
     :geometry (geometry :x "26%"
                         :y "7%"
-                        :width "10%"
+                        :width "5%"
                         :height "10%")
     (bluetooth))
 
