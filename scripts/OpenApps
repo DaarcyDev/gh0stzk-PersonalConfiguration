@@ -60,31 +60,31 @@ case "$1" in
      alacritty --class FloaTerm,Alacritty\
                     -o window.dimensions.lines=15 \
                        window.dimensions.columns=55\
-                    -e ~/.config/bspwm/scripts/firstNetwork.sh;;
+                    -e ~/.config/bspwm/scripts/Networks.sh --firstNet;;
   
   --secondNetwork)
      alacritty --class FloaTerm,Alacritty\
                     -o window.dimensions.lines=15 \
                        window.dimensions.columns=55\
-                    -e ~/.config/bspwm/scripts/secondNetwork.sh;;
+                    -e ~/.config/bspwm/scripts/Networks.sh --secondNet;;
 
   --thirdNetwork)
      alacritty --class FloaTerm,Alacritty\
                     -o window.dimensions.lines=15 \
                        window.dimensions.columns=55\
-                    -e ~/.config/bspwm/scripts/thirdNetwork.sh;;
+                    -e ~/.config/bspwm/scripts/Networks.sh --thirdNet;;
 
   --bluetoothFirstDevice)
     alacritty --class FloaTerm,Alacritty\
                     -o window.dimensions.line=15\
                        window.dimensions.columns=55\
-                    -e ~/.config/bspwm/scripts/bluetoothFirstDevice.sh;;
+                    -e ~/.config/bspwm/scripts/bluetoothStatus.sh --bluetoothFirstDevice;;
   
   --bluetoothSecondDevice)
     alacritty --class FloaTerm,Alacritty\
                     -o window.dimensions.line=15\
                        window.dimensions.coumns=55\
-                    -e ~/.config/bspwm/scripts/bluetoothSecondDevice.sh;;
+                    -e ~/.config/bspwm/scripts/bluetoothStatus.sh --bluetoothSecondDevice;;
   #Apps
 
   --spotify)
