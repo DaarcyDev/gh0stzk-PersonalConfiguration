@@ -142,7 +142,12 @@
                     :tooltip "Off"
                     "󰂲"))
           (label :text currentBluetooth
-                 :class "currentNetwork")
+                 :class "currentNetwork"
+                 :visible {currentBluetooth != ""})
+
+          (label :text "No Devices"
+                 :class "currentNetwork"
+                 :visible {currentBluetooth == ""})
           (box :orientation "v"
                :halign "center"
                :valign "center"

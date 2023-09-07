@@ -1,0 +1,97 @@
+;; Music Variables
+(defpoll art		:interval "5s"  "MediaControl coverloc")
+(defpoll title		:interval "5s"  "MediaControl title")
+(defpoll artist		:interval "5s"  "MediaControl artist")
+(defpoll playpause	:interval "5s"  "MediaControl statusicon")
+(defpoll songtime 	:interval "1s"  "MediaControl percent")
+;; nuestras variables
+(defpoll currentBluetooth :interval "1s" "bluetoothctl info | grep 'Name' | cut -d ' ' -f 2-")
+(defpoll bluetoothFirstDevice :interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '1p'")
+(defpoll bluetoothSecondDevice :interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '2p'")
+
+;;  Music Widgets
+(defwidget music [] 
+	(box 	:class "music-player"
+			:orientation "v" 
+		 	:space-evenly "false"  
+		 	:halign "center"
+	(box 	:class "album_art" 
+		 	:style "background-image: url('${art}');")
+	(box 	:orientation "v" 
+		 	:space-evenly "false"
+		 	:halign "center"
+		 	:spacing 10 
+	(label  :class "artist"
+		 	:limit-width 15
+		 	:text artist)
+ 	(label  :class "song"
+		 	:limit-width 20
+		 	:text title) 
+	(box 	:orientation "h"  
+		 	:space-evenly "false"
+			:halign "center"
+			:spacing 30
+			(button :class "btn_prev" :onclick "MediaControl --previous" "󰒮")
+			(button :class "btn_play" :onclick "MediaControl --toggle" playpause)
+			(button :class "btn_next" :onclick "MediaControl --next" "󰒭"))
+	(box    :orientation "h"
+			:class "metric-player"
+			:space-evenly "false"
+			(scale  :min 0
+					:max 101
+					:active "false"
+					:value {songtime != "" ? "${songtime}" : "0"}
+				)       
+			)
+		)
+	)
+)
+
+;widget bluetooth
+(defwidget bluetoothWidget []
+    (box :class "music-player"
+         :orientation "v"
+         (box :orientation "h"
+              (button :class "bluetooth"
+                      :onclick "OpenApps --bluetoothOn"
+                      :tooltip "On"
+                      "󰂯")
+              (button :class "bluetooth"
+                      :onclick "OpenApps --bluetoothOff"
+                      :tootip "Off"
+                      "󰂲"))
+        (label :text currentBluetooth)
+        (label :text "no hay dispositivos conecatados"
+                :visible {currentBluetooth == ""})
+        (box :orientation "v"
+             (label :text "dispositivos para vincular")
+             (button :class "bluetooth"
+                     :onclick "OpenApps --bluetoothFirstDevice"
+                     bluetoothFirstDevice)
+             (button :class "bluetooth"
+                     :onclick "OpenApps --bluetoothSecondDevice"
+                     bluetoothSecondDevice)
+        (label :text "scan")
+        (button :class "bluetooth"
+                :onclick "OpenApps --bluetooth"
+                "x"))))
+
+
+;window Bluetooth
+(defwindow bluetooth
+    :geometry (geometry :x "10%"
+                        :y "-7%"
+                        :width "18%"
+                        :height "47%"
+                        :anchor "bottom center")
+    (bluetoothWidget))
+
+;windows
+    
+(defwindow music
+    :geometry (geometry :x "10%"
+                        :y "-7%"
+                        :width "18%"
+                        :height "47%"
+                        :anchor "bottom center")
+    (music))

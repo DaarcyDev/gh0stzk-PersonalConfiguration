@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+
+
+mplayer() {
+    LOCKFILE="$HOME/.cache/eww-cris-mplayer.lock"
+
+if [[ ! -f "$LOCKFILE" ]]; then
+    touch "$LOCKFILE"
+    eww open music -c ~/.config/bspwm/rices/"$RICETHEME"/widgets/
+elif [[ -f "$LOCKFILE" ]]; then
+    eww close music -c ~/.config/bspwm/rices/"$RICETHEME"/widgets/
+    rm "$LOCKFILE"
+fi
+}
+
+bluetooth() {
+    LOCKFILE_PROFILE="$HOME/.cache/eww-cris-options.lock"
+
+if [[ ! -f "$LOCKFILE_PROFILE" ]]; then
+    touch "$LOCKFILE_PROFILE"
+    eww open bluetooth -c ~/.config/bspwm/rices/"$RICETHEME"/widgets/
+elif [[ -f "$LOCKFILE_PROFILE" ]]; then
+    eww close bluetooth -c ~/.config/bspwm/rices/"$RICETHEME"/widgets/
+    rm "$LOCKFILE_PROFILE"
+fi
+}
+
+case "$1" in
+	--musicplayer)
+		mplayer;;
+    --bluetooth)
+        bluetooth;;
+	*)
+		echo "Error..";;
+esac
