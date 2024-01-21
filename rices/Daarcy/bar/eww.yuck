@@ -1,0 +1,441 @@
+;; Modified   by https://github.com/gh0stzk/dotfiles
+
+;; Workspaces
+(deflisten workspaces "./scripts/WorkSpaces")
+
+;; Volume vars
+(defvar volum false)
+(defpoll volume_icon :interval "1s" "scripts/Volume --icon")
+(defpoll volume_value :interval "1s" "scripts/Volume --vol")
+
+;; Network
+(defpoll WIFIICON :interval "30s" `scripts/Network --icon`)
+(defpoll NETSTAT :interval "30s" `scripts/Network --stat`)
+
+;; Updates vars
+(defpoll UPDATES :interval "2m" `Updates --get-updates`)
+(defvar pac false)
+
+;; Music vars
+(defpoll SONG 	:interval "1s" "MediaControl --title")
+(defpoll ARTIST :interval "1s" "MediaControl --artist")
+(defpoll COVER 	:interval "1s" "MediaControl --cover")
+(defpoll STATUS :interval "1s" "MediaControl --status")
+
+;; Bluetooth
+(defpoll currentBluetooth 			:interval "1s" "bluetoothctl info | grep 'Name' | cut -d ' ' -f 2-")
+(defpoll bluetoothFirstDevice 	:interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '1p'")
+(defpoll bluetoothSecondDevice	:interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '2p'")
+(defpoll bluetoothStatus 				:interval "1s" "bluetoothctl show | grep Powered | awk '{print $2}'")
+
+;; battery
+(defpoll powerStatus				:interval "1s" "upower -d | grep 'percentage' | head -n 1 | awk '{print substr($2, 1, length($2)-1)}'")
+(defpoll battery						:interval "5s"	"scripts/battery.sh icon")
+
+;; brightness
+(defpoll current-brightness :interval "1s" "brightnessctl -m -d amdgpu_bl1 | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
+(defvar bright false)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;							Widget Section's							 ;;	
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Launcher Widgets ;;
+(defwidget launcher []
+	(box :orientation "v" 
+		 :space-evenly "false" 
+		 :spacing -15
+	(eventbox :cursor "pointer"
+  	(button :class "launcher_icon" 
+		   	:onclick "cd ; OpenApps --menu"
+		   	:onrightclick "OpenApps --rice" "󰣇")))
+)
+
+;; Workspaces Widgets ;;
+(defwidget workspaces []
+	(literal :content workspaces))
+
+
+;; Wifi Widgets ;;
+(defwidget wifi []
+	(box		
+		:orientation "v"
+	(button		
+				:class "green_icon"
+				:tooltip "${NETSTAT}"
+				:onclick "OpenApps --network"
+				" ")))
+
+;; Music Control ;;
+(defwidget music [] 
+	(box :class "mainbars"
+		 :orientation "v"
+		 :spacing 10
+		 :space-evenly "false"
+		 
+		(button :onclick "OpenApps --spotify"
+		(box :class "album_art"
+		 		:orientation "v"
+			  :valign "center"
+			  :halign "center"
+			  :style "background-image: url('${COVER}');"))
+			  
+		(eventbox :cursor "pointer"
+		(button :onclick "OpenApps --player"
+		(box :orientation "v"
+			  :class "song-info"
+			  :spacing 5
+			  :valign "center"
+			  :halign "center"
+			  
+				(label :class "song"
+					   :xalign 0
+					   ;:justify "fill"
+					   :wrap "true"
+					   :limit-width 6
+					   :text SONG)
+					   
+				(label :class "artist"
+					   :xalign 0
+					   ;:justify "fill"
+					   :wrap "true"
+					   :limit-width 6
+					   :text ARTIST)
+				)))
+
+		  (box :spacing 5
+				:orientation "v"
+			  :valign "center"
+			  :halign "center"
+			  :space-evenly "false"
+			  
+			  (eventbox :cursor "pointer"
+				(button :class "player-previous" 
+						:onclick "MediaControl --previous" "󰒮"))
+						
+			  (eventbox :cursor "pointer"
+				(button :class "player-toggle" 
+						:onclick "MediaControl --toggle" 
+						{STATUS == "Playing" ? "󰏤" : STATUS == "Paused" ? "󰐊" : "󰓛"}))
+						
+			  (eventbox :cursor "pointer"
+				(button :class "player-next" 
+						:onclick "MediaControl --next" "󰒭"))
+		  )
+	)
+)
+
+;; control center ;;
+(defwidget notifycenter []
+	(eventbox	:onhover "${EWW_CMD} update notify=true"	
+				:onhoverlost "${EWW_CMD} update notify=false"
+				:cursor "pointer"
+	(box		:orientation "v"					
+				:space-evenly "false" 	 
+				:vexpand "true" 	
+				
+	(revealer	:transition "slideup"				
+				:reveal notify			 
+				:duration "550ms"
+	(box		:orientation "v"					
+				:space-evenly "false"
+				
+	(label 	:class "red_icon"
+					:text "󰋊")
+	(label :text "${round(EWW_DISK["/"].used_perc, 0)}%")
+	(label 	:class "red_icon"
+					:text "")
+	(label :text "${round(EWW_RAM.used_mem_perc, 0)}%")
+	(label 	:class "red_icon"
+					:text "󰍛")
+	(label :text "${round(EWW_CPU.avg, 0)}%")))
+
+	(button	
+				:class "menu_icon" 									
+				:tooltip "Widgets"
+		(label :text "󰹯")))))
+
+(defvar notify false)
+
+;; Brightness Widgets ;;
+(defwidget bright []
+  (eventbox :onhover "${EWW_CMD} update bright=true"   
+  			:onhoverlost "${EWW_CMD} update bright=false"
+  			(box    :orientation "v"  
+			  		:space-evenly "false"  
+					:spacing 2
+  			(revealer :transition "slideup" 
+			  		  :reveal bright   
+					  :duration "550ms"
+  			(scale :class "bribar" 
+			  	   :value current-brightness 
+				   :tooltip "Brightness: ${current-brightness}%" 
+				   :onchange "brightnessctl set {}%" 
+				   :orientation "v" 
+				   :flipped true 
+				   :max 101 
+				   :min 0))
+  			(label :class "yellow_icon" 
+			  	   :text "󰃞"))))
+
+
+
+;; Pacman Widgets ;;
+(defwidget pacman []
+	(eventbox	:onhover "${EWW_CMD} update pac=true"	
+				:onhoverlost "${EWW_CMD} update pac=false" 
+	(box		:orientation "v"					
+				:space-evenly "false" 	 
+				:vexpand "false" 	
+				
+	(revealer	:transition "slideup"				
+				:reveal pac			 
+				:duration "550ms"
+	(box		:orientation "v"					
+				:space-evenly "false"
+				
+	(label  	:class "bar-updates-text"
+				:text "${UPDATES}")))
+	
+	(eventbox   :cursor "pointer"
+	(button		
+				;:style "background-image: url('images/pac_man.png');"
+				:class "green_icon"
+				:onrightclick "OpenApps --checkupdates"
+				:onclick "OpenApps --update"
+				" ")) )))
+
+
+;; Volume Widgets ;;
+(defwidget volum []
+	(eventbox :onhover "${EWW_CMD} update volum=true" 		
+			  :onhoverlost "${EWW_CMD} update volum=false"
+			  :cursor "pointer"
+	(box      :orientation "v" 	  
+			  :space-evenly "false" 
+			  :spacing "2"
+	(revealer :transition "slideup" 
+			  :reveal volum         
+			  :duration "550ms"
+	(scale    :class "volbar" 	  
+			  :value volume_value
+			  :onchange "pamixer --set-volume {}"
+			  :orientation "v"      
+			  :flipped true 
+			  :tooltip "Volume: ${volume_value}%" 
+			  :max 101 
+			  :min 0))
+	(button   
+				;:style "background-image: url('${volume_icon}');"
+			  :class "blue_icon"
+			  :onrightclick "OpenApps --soundcontrol"
+			  :onclick "scripts/volume --toggle-muted"
+				""))))
+
+;; Clock Widgets ;;
+(defwidget time []
+	(box	:orientation "v" 
+			:class "time" 
+			:valign "end"
+	(eventbox :cursor "pointer"
+	(button	:onclick "OpenApps --calendar"
+			:class "time-hour" "${formattime(EWW_TIME, "%H")}"))
+	(eventbox :cursor "pointer"
+	(button	:onclick "OpenApps --calendar"
+			:class "time-min" "${formattime(EWW_TIME, "%M")}"))))
+
+
+;; Powermenu Widgets ;;
+(defwidget power []
+	(eventbox	:onhover "${EWW_CMD} update power=true"	
+				:onhoverlost "${EWW_CMD} update power=false"
+				:cursor "pointer"
+	(box		:orientation "v"					
+				:space-evenly "false" 	 
+				:vexpand "false" 	
+				:class "powermenu"
+	(revealer	:transition "slideup"				
+				:reveal power			 
+				:duration "550ms"
+	(box		:orientation "v"
+				:space-evenly "false"
+
+	(button		:style "background-image: url('images/enpass.png');"
+				:class "button-lock" 				
+				:tooltip "Lock Screen"	 
+				:onclick "physlock -d")
+				
+	(button   	:style "background-image: url('images/sys-sleep.png');"
+				:class "button-bspres"  			
+				:tooltip "Suspend computer" 
+				:onclick "systemctl suspend")
+				
+	(button		:style "background-image: url('images/sys-reboot.png');"
+				:class "button-reb"					
+	  			:tooltip "Reboot"		 
+				:onclick "reboot")
+				
+	(button		
+				:style "background-image: url('images/sys-poweroff.png');"
+				:class "button-off"					
+				:tooltip "Shutdown"		 
+				:onclick "shutdown now")))
+
+	(button		
+				:style "background-image: url('images/sys-powermenu.png');"
+				:class "button-powermenu"					
+				:tooltip "Power Menu"))))
+(defvar power false)
+
+;; options Widgets ;; 
+(defwidget bluetoothMenu []
+     (box :class "optionbox"
+          :orientation "v"
+          :space-evenly "false"
+          :halign "center"
+          :valign "center"
+          (box :orientation "h"
+               :halign "center"
+               :valign "center"
+               :space-evenly "true"
+               :spacing 40
+                 (button :class "bluetoothOption"
+                    :onclick "OpenApps --bluetoothOn"
+                    :tooltip "On"
+                    "󰂯")
+                 (button :class "bluetoothOption"
+                    :onclick "OpenApps --bluetoothOff"
+                    :tooltip "Off"
+                    "󰂲"))
+          (label :text currentBluetooth
+                 :class "currentNetwork"
+                 :visible {currentBluetooth != ""})
+
+          (label :text "No Devices"
+                 :class "currentNetwork"
+                 :visible {currentBluetooth == ""})
+          (box :orientation "v"
+               :halign "center"
+               :valign "center"
+               :space-evenly "false"
+                (label :text "connect"
+                       :class "launcher-pfp-label")
+                (button :class "bluetoothDevice"
+                        :onclick "OpenApps --bluetoothFirstDevice"
+                        :tooltip bluetoothFirstDevice
+                        bluetoothFirstDevice)
+                (button :class "bluetoothDevice"
+                        :onclick "OpenApps --bluetoothSecondDevice"
+                        :tooltip bluetoothSecondDevice
+                        bluetoothSecondDevice)
+                (label :text "scan"
+                       :class "launcher-pfp-label")  
+                (button :class "bluetoothOption"
+                        :onclick "OpenApps --bluetoothManager"
+                        :tooltip "scan"
+                        "󱓇"))))
+
+(defwidget bluetooth []
+	(box :orientation "v" 
+		 :space-evenly "false" 
+	(box :cursor "pointer"
+		(button 
+			:class "blue_icon"
+    	:onclick "OpenApps --bluetooth"
+      :tooltip "On"
+      :visible {bluetoothStatus == "yes"} "󰂯")
+    (button 
+			:class "blue_icon"
+    	:onclick "OpenApps --bluetooth"
+      :tooltip "Off"
+      :visible {bluetoothStatus == "no"} "󰂲")
+)))
+
+
+;; Battery Widgets ;;
+(defwidget battery []
+	(box	:orientation "v"	
+			:space-evenly "false"
+	(label	:class "bat"		
+			:halign "center"		
+			:text battery)
+	(label :class "bat"
+			:halign "center"
+			:text "${powerStatus}%")
+))
+
+
+;; Top Widgets ;;
+(defwidget top []
+	(box	:orientation "v" 
+			:space-evenly "false" 
+			:valign "start" 
+(launcher)
+(workspaces)
+(music)
+))
+
+;; Mid Widgets ;;
+(defwidget mid []
+	(box	:orientation "v" 
+			:space-evenly "false" 
+			:valign "center" 
+(bluetooth)))
+
+
+;; Bottom Widgets ;;
+(defwidget bottom []
+	(box	:orientation "v" 
+			:space-evenly "false"
+(time)
+(power)))
+
+;; Control Panel Widgets ;;	
+(defwidget control []
+	(box :orientation "v" 
+		 :space-evenly "false"  
+		 :class "control"
+		 :spacing 5
+(notifycenter)
+(bright)
+(volum)
+(bluetooth)
+(wifi)
+(pacman)
+(battery)))
+
+;; End Widgets ;;
+(defwidget end []
+	(box :orientation "v" 
+		 :space-evenly "false" 
+		 :valign "end" 
+		 :spacing 5
+(control)
+(bottom)))
+
+;; Bar Widgets ;;
+(defwidget bar []
+	(box :class "eww_bar" 
+		 :orientation "v" 
+		 :space-evenly "true"
+		 :spacing 1
+		 :vexpand "false" 
+		 :hexpand "false"
+(top)
+
+(end)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;							Window Section's							 ;;	
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defwindow bar
+	:geometry (geometry :x "97%"
+						:y "0%"
+						:anchor "left center"
+						:height "95%"
+						:width "47px")
+						
+	:reserve (struts :distance "5px"
+					 :side "left")
+	:wm-ignore false
+	(bar))

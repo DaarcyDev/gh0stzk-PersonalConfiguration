@@ -1,0 +1,6 @@
+(include "calendar/calendar.yuck")
+(include "powermenu/powermenu.yuck")
+(include "profilecard/profilecard.yuck")
+(include "player/player.yuck")
+(include "network/network.yuck")
+(include "bluetooth/bluetooth.yuck")

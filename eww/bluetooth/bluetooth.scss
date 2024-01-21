@@ -1,0 +1,24 @@
+.bluetoothDevice{
+    background-color:#353535;
+    margin:.5rem;
+    padding:.5rem;
+    border-radius:10px;
+    font-size:1.2rem
+}
+.bluetoothDevice:hover{
+    color:#f28fad;
+}
+.optionbox{
+    background-color: #1d1f28;
+    padding: 5px 20px;
+    border-radius: 10px;
+    border: 1px solid #fff;
+}
+.bluetoothOption{
+    font-size: 2em;
+    margin:1rem;
+}
+.bluetoothOption:hover{
+    font-size:1.8em;
+    color:#f28fad
+}

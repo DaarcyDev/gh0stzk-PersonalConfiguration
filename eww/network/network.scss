@@ -1,0 +1,27 @@
+.netbox{
+    margin:0;
+    padding:3rem 3rem;
+    //max-height:1em;
+    background-color: #1d1f28
+    
+}
+.currentNetwork{
+    padding:.5rem 2rem;
+    border:2px solid #454545;
+    border-radius: 10px;
+    margin:1rem 0;
+}
+.firstNetwork{
+    background-color: #353535;
+    padding:.5rem 1rem;
+    margin: .3rem;
+    border-radius: 10px;
+}
+.firstNetwork:hover{
+    color:#f28fad;
+}
+.optionbox{
+    background-color: #1d1f28;
+    padding: 0 20px;
+    border-radius: 10px;
+}

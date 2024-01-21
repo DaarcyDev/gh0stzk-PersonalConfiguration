@@ -1,0 +1,209 @@
+* {
+  all: unset;
+}
+
+// Variable Color's
+$background: #0d0f18;
+$foreground: #a5b6cf;
+
+$black: #151720;
+$gray: #1c1e27;
+$red: #dd6777;
+$green: #90ceaa;
+$yellow: #ecd3a0;
+$blue: #86aaec;
+$magenta: #c296eb;
+$cyan: #93cee9;
+$white: $foreground;
+$archlogo: #0f94d2;
+
+// The bar
+.eww_bar {
+  background-color: $background;
+  padding: 0.3rem;
+  border-radius: 9px;
+}
+
+// Launcher
+.launcher_icon {
+  color: $archlogo;
+  font-family: "Material Design Icons Desktop";
+  font-size: 1.7em;
+  padding: 1rem 0 1rem 0;
+}
+
+// Workspaces
+.works {
+  font-family: "Material Design Icons Desktop";
+  padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+  background-color: $black;
+  border-radius: 5px;
+}
+
+.workspace-focused {
+  font-size: 18px;
+  color: #8ea6c4;
+  margin: 0.35rem 0 0.35rem 0;
+}
+
+.workspace-occupied {
+  font-size: 18px;
+  color: #6e8db4;
+  margin: 0.35rem 0 0.35rem 0;
+}
+
+.workspace-empty {
+  font-size: 18px;
+  color: #434c5e;
+  margin: 0.35rem 0 0.35rem 0;
+}
+
+// icons info
+.control {
+  padding: 0.5rem;
+  background-color: $black;
+  border-radius: 5px;
+}
+
+.trayicon {
+  background-repeat: no-repeat;
+  background-size: 25px;
+  min-height: 25px;
+  min-width: 7px;
+  margin: 0.2rem 0 0.2rem 0;
+}
+
+.bar-updates-text {
+  font-family: "JetBrainsMono NF";
+  font-size: 14px;
+  font-weight: Bold;
+  color: #8ea6c4;
+  margin: .4rem 0 .2rem .2rem;
+}
+
+scale trough {
+  all: unset;
+  background-color: $background;
+  border-radius: 5px;
+  min-height: 80px;
+  min-width: 10px;
+  margin: 0.3rem 0 0.3rem 0.1rem;
+}
+
+.volbar trough highlight {
+  // background: linear-gradient($red, $magenta, $blue, $cyan);
+  background-color: $blue; 
+  border-radius: 5px;
+}
+
+// Clock
+.time {
+  font-family: JetBrainsMono NF;
+  font-weight: bold;
+  font-size: 1.2em;
+  background-color: $black;
+  color: $white;
+  border-radius: 5px;
+  padding: 0.7rem 0 0.5rem 0;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+// Powermenu
+.powermenu {
+  font-family: Material Design Icons Desktop;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.powericons {
+  margin: 0.2rem 0 0.2rem 0;
+}
+
+//----- Music -----//
+.mainbars {
+	background-color: $gray;
+	//border: 1px solid $green;
+	border-radius: 12px;
+	margin: 1rem 0rem;
+	padding: .5rem 0
+	//box-shadow: 3px 3px 5px 0px $borderbg;
+}
+
+.album_art {
+    background-repeat: no-repeat;
+	background-size: 30px;
+	min-height: 30px;
+	min-width: 30px;
+	border-radius: 8px;
+}
+
+.song-info {
+	min-width: 15px;
+}
+
+.song {
+	font-size : .8rem;
+	font-weight : bold;
+}
+
+.artist {
+	font-size : .7rem;
+	font-weight : bold;
+}
+
+.player-toggle {
+	font-family: "Material Design Icons Desktop";
+    font-size: 1.6rem;
+    }
+
+.player-previous,
+.player-next {
+	font-family: "Material Design Icons Desktop";
+	font-size: 1.2rem;
+  }
+
+.button-bspres,
+.button-reb,
+.button-lock,
+.button-quit,
+.button-powermenu,
+.button-off {
+  background-repeat: no-repeat;
+  background-size: 22px;
+  min-height: 22px;
+  min-width: 7px;
+  margin: 0rem 0rem .5rem 9px;
+}
+
+.blue_icon{
+  color: $blue;
+  font-size: 20px;
+}
+
+.green_icon{
+  //color: #90ce55;
+  color: $green;
+  font-size: 20px;
+}
+.yellow_icon{
+  color: $yellow;
+  font-size: 20px;
+}
+.red_icon{
+  color: $red;
+  font-size:20px;
+}
+.menu_icon{
+  color :$red;
+  font-size:25px
+}
+.bat{
+  font-family: JetBrainsMono Nerd Font;
+  font-size: 1em;
+  //padding-right: .5rem;
+  color: $blue;
+}
+.bribar trough highlight {
+  background-color: $yellow;
+  border-radius: 5px;
+}

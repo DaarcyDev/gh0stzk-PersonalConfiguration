@@ -1,0 +1,56 @@
+(defpoll net :interval "10s" "iwctl station wlan0 show | awk '/Connected network/ {print $3}' && iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }'")
+
+(defpoll currentNetwork :interval "1s" "iwctl station wlan0 show | awk '/Connected network/ {print $3}'")
+
+(defpoll firstNetwork :interval "1s" "iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }' | sed -n '1p'")
+
+(defpoll secondNetwork :interval "1s" "iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }' | sed -n '2p'")
+
+(defpoll thirdNetwork :interval "1s" "iwctl station wlan0 get-networks | awk 'NR>1 && NF>0 {print $1, $4}' | awk -F '\n' '/^\s*[a-zA-Z0-9]/ { print $1 }' | sed -n '3p'")
+
+
+(defwidget wifiWidget []
+    (box :class "optionbox netbox"
+         :orientation "v"
+         :space-evenly "false"
+         :halign "center"
+         :valign "start"
+         (box :orientation "v"
+                :halign "center"
+                :valign "center"
+                :space-evenly "false"
+                :hexpand "true"
+                :spacing 0
+                (label :text "Network"
+                        :class "launcher-pfp-label")
+                (label :text currentNetwork
+                        :class "currentNetwork"))
+        (box :orientation "v"
+                :space-evenly "false"
+            (button :class "firstNetwork"
+                        :onclick "OpenApps --firstNetwork"
+                        :tooltip firstNetwork
+                        :visible {firstNetwork != ""}
+                        firstNetwork)
+            (button :class "firstNetwork"
+                        :onclick "OpenApps --secondNetwork"
+                        :tooltip secondNetwork
+                        :visible {secondNetwork != ""}
+                        secondNetwork)
+            (button :class "firstNetwork"
+                        :onclick "OpenApps --thirdNetwork"
+                        :tooltip thirdNetwork
+                        :visible {thirdNetwork != ""}
+                        thirdNetwork))))
+
+
+
+;; options wifi ;;
+(defwindow wifiMenu
+    :geometry (geometry :x "75%"
+                        :y "7%"
+                        :width "10%"
+                        :height "10%")
+    (wifiWidget))
+
+

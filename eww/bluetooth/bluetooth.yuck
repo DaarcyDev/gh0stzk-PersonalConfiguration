@@ -1,0 +1,60 @@
+(defpoll currentBluetooth :interval "1s" "bluetoothctl info | grep 'Name' | cut -d ' ' -f 2-")
+(defpoll bluetoothFirstDevice :interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '1p'")
+(defpoll bluetoothSecondDevice :interval "1s" "bluetoothctl devices | awk '{print $3,$4,$5}'|sed -n '2p'")
+
+;; options Widgets ;; 
+(defwidget bluetooth []
+     (box :class "optionbox"
+          :orientation "v"
+          :space-evenly "false"
+          :halign "center"
+          :valign "center"
+          (box :orientation "h"
+               :halign "center"
+               :valign "center"
+               :space-evenly "true"
+               :spacing 40
+                 (button :class "bluetoothOption"
+                    :onclick "OpenApps --bluetoothOn"
+                    :tooltip "On"
+                    "󰂯")
+                 (button :class "bluetoothOption"
+                    :onclick "OpenApps --bluetoothOff"
+                    :tooltip "Off"
+                    "󰂲"))
+          (label :text currentBluetooth
+                 :class "currentNetwork"
+                 :visible {currentBluetooth != ""})
+
+          (label :text "No Devices"
+                 :class "currentNetwork"
+                 :visible {currentBluetooth == ""})
+          (box :orientation "v"
+               :halign "center"
+               :valign "center"
+               :space-evenly "false"
+                (label :text "connect"
+                       :class "launcher-pfp-label")
+                (button :class "bluetoothDevice"
+                        :onclick "OpenApps --bluetoothFirstDevice"
+                        :tooltip bluetoothFirstDevice
+                        bluetoothFirstDevice)
+                (button :class "bluetoothDevice"
+                        :onclick "OpenApps --bluetoothSecondDevice"
+                        :tooltip bluetoothSecondDevice
+                        bluetoothSecondDevice)
+                (label :text "scan"
+                       :class "launcher-pfp-label")  
+                (button :class "bluetoothOption"
+                        :onclick "OpenApps --bluetoothManager"
+                        :tooltip "scan"
+                        "󱓇"))))
+
+
+;; Options Menu ;;
+(defwindow bluetoothMenu
+    :geometry (geometry :x "65%"
+                        :y "5%"
+                        :width "5%"
+                        :height "10%")
+    (bluetooth))

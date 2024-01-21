@@ -7,41 +7,44 @@
 #	url: https://github.com/gh0stzk
 
 function hide() {
-	
-case "${RICETHEME}" in
-    emilia|jan|aline|silvia|pamela)
-        polybar-msg cmd hide | bspc config top_padding 2
-        ;;
-    isabel|cristina)
-        polybar-msg cmd hide | bspc config bottom_padding 2
-        ;;
-    melissa|cynthia)
-        polybar-msg cmd hide | bspc config top_padding 2 | bspc config bottom_padding 2
-        ;;
-    z0mbi3)
-        eww -c "$HOME"/.config/bspwm/rices/z0mbi3/bar close bar | bspc config left_padding 2
-        ;;
-    andrea)
-        eww -c "$HOME"/.config/bspwm/rices/andrea/arin close-all | bspc config top_padding 2
-        ;;
-    karla)
-        polybar-msg cmd hide | bspc config top_padding 2
-        ;;
-    *)
-        echo "Error: Something fails dud.."
-        ;;
-esac
-	
+
+	case "${RICETHEME}" in
+	emilia | jan | aline | silvia | pamela)
+		polybar-msg cmd hide | bspc config top_padding 2
+		;;
+	isabel | cristina)
+		polybar-msg cmd hide | bspc config bottom_padding 2
+		;;
+	melissa | cynthia)
+		polybar-msg cmd hide | bspc config top_padding 2 | bspc config bottom_padding 2
+		;;
+	z0mbi3)
+		eww -c "$HOME"/.config/bspwm/rices/z0mbi3/bar open --toggle bar | bspc config left_padding 2
+		;;
+	andrea)
+		eww -c "$HOME"/.config/bspwm/rices/andrea/andy open --toggle bar | bspc config top_padding 2
+		;;
+	karla)
+		polybar-msg cmd hide | bspc config top_padding 2
+		;;
+	Daarcy)
+		eww -c "$HOME"/.config/bspwm/rices/Daarcy/bar open --toggle bar | bspc config right_padding 5
+		;;
+	*)
+		echo "Error: Something fails dud.."
+		;;
+	esac
+
 }
 
 function unhide() {
-	
-case "${RICETHEME}" in
+
+	case "${RICETHEME}" in
 	emilia)
-		polybar-msg cmd show | bspc config top_padding 59
+		polybar-msg cmd show | bspc config top_padding 56
 		;;
 	jan)
-		polybar-msg cmd show | bspc config top_padding 64
+		polybar-msg cmd show | bspc config top_padding 50
 		;;
 	pamela)
 		polybar-msg cmd show | bspc config top_padding 59
@@ -65,34 +68,35 @@ case "${RICETHEME}" in
 		polybar-msg cmd show | bspc config bottom_padding 60
 		;;
 	z0mbi3)
-		eww -c "$HOME"/.config/bspwm/rices/z0mbi3/bar open bar | bspc config left_padding 79
+		eww -c "$HOME"/.config/bspwm/rices/z0mbi3/bar open --toggle bar | bspc config left_padding 79
 		;;
 	karla)
 		polybar-msg cmd show | bspc config top_padding 48
 		;;
 	andrea)
-		eww -c "$HOME"/.config/bspwm/rices/andrea/arin open-many \
-		   search \
-		   apps \
-		   weather \
-		   music \
-		   system | bspc config top_padding 67
+		eww -c "$HOME"/.config/bspwm/rices/andrea/andy open --toggle bar | bspc config top_padding 87
+		;;
+	Daarcy)
+		eww -c "$HOME"/.config/bspwm/rices/Daarcy/bar open --toggle bar | bspc config right_padding 60
 		;;
 	*)
 		echo "Error: Something fails dud.."
 		;;
-esac
+	esac
 
 }
 
 case $1 in
-	-h | --hide | hide)
-		hide
-		exit;;
-	-u | --unhide | unhide)
-		unhide
-		exit;;
-	*) # Invalid option
-		echo "Error: Invalid option"
-		exit;;
+-h | --hide | hide)
+	hide
+	exit
+	;;
+-u | --unhide | unhide)
+	unhide
+	exit
+	;;
+*) # Invalid option
+	echo "Error: Invalid option"
+	exit
+	;;
 esac
